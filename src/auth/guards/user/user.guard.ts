@@ -1,6 +1,6 @@
 import { BadRequestException, CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { User } from 'src/auth/entities/USER.entity';
+import { User } from 'src/auth/entities/user.entity';
 
 @Injectable()
 export class UserGuard implements CanActivate {

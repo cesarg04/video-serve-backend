@@ -6,7 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { VideosModule } from './videos/videos.module';
 import { FilesModule } from './files/files.module';
 import { AuthModule } from './auth/auth.module';
-import { User } from './auth/entities/USER.entity';
+import { User } from './auth/entities/user.entity';
 import { Video } from './videos/entities/video.entity';
 import { CommentsModule } from './comments/comments.module';
 import { Comments } from './comments/entities/comment.entity';

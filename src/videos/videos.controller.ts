@@ -9,7 +9,7 @@ import { fileNamer } from 'src/files/helpers/FileNamer';
 import { FilesService } from 'src/files/files.service';
 import { Auth } from 'src/auth/decorators/auth/auth.decorator';
 import { GetUser } from 'src/auth/decorators/get-user/get-user.decorator';
-import { User } from 'src/auth/entities/USER.entity';
+import { User } from 'src/auth/entities/user.entity';
 import { FindVideoDto } from './dto/find-vide.dto';
 
 @Controller('videos')

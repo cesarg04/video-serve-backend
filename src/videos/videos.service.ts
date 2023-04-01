@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Video } from './entities/video.entity';
 import { Repository } from 'typeorm';
 import { FilesService } from 'src/files/files.service';
-import { User } from 'src/auth/entities/USER.entity';
+import { User } from 'src/auth/entities/user.entity';
 import { FindVideoDto } from './dto/find-vide.dto';
 
 

@@ -1,9 +1,8 @@
 import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
-import { User } from 'src/auth/entities/USER.entity';
+import { User } from 'src/auth/entities/user.entity';
 import { Repository } from 'typeorm';
-import { Video } from 'src/videos/entities/video.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { VideosService } from 'src/videos/videos.service';
 import { Comments } from './entities/comment.entity';

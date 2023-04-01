@@ -4,7 +4,7 @@ import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { Auth } from 'src/auth/decorators/auth/auth.decorator';
 import { GetUser } from 'src/auth/decorators/get-user/get-user.decorator';
-import { User } from 'src/auth/entities/USER.entity';
+import { User } from 'src/auth/entities/user.entity';
 
 @Controller('comments')
 export class CommentsController {

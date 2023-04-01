@@ -1,4 +1,4 @@
-import { User } from "src/auth/entities/USER.entity";
+import { User } from "src/auth/entities/user.entity";
 import { Comments } from "src/comments/entities/comment.entity";
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 

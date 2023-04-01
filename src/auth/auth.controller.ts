@@ -5,7 +5,7 @@ import { UpdateAuthDto } from './dto/update-auth.dto';
 import { LoginDto } from './dto/login-user.dto';
 import { Auth } from './decorators/auth/auth.decorator';
 import { GetUser } from './decorators/get-user/get-user.decorator';
-import { User } from './entities/USER.entity';
+import { User } from './entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
