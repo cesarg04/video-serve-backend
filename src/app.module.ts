@@ -10,6 +10,7 @@ import { User } from './auth/entities/USER.entity';
 import { Video } from './videos/entities/video.entity';
 import { CommentsModule } from './comments/comments.module';
 import { Comments } from './comments/entities/comment.entity';
+import { CommonModule } from './common/common.module';
 
 
 @Module({
@@ -29,6 +30,7 @@ import { Comments } from './comments/entities/comment.entity';
     FilesModule,
     AuthModule,
     CommentsModule,
+    CommonModule,
     
   ],
   controllers: [AppController],

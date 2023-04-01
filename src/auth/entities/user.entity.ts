@@ -34,13 +34,19 @@ export class User {
 
     @OneToMany(
         () => Video,
-        ( video ) => video.user
+        ( video ) => video.user,
+        {
+            onDelete: 'CASCADE'
+        }
     )
     videos: Video
 
     @OneToMany(
         () => Comments,
-        ( comments ) => comments.user
+        ( comments ) => comments.user,
+        {
+            onDelete: 'CASCADE'
+        }
     )
     comments: Comments
 

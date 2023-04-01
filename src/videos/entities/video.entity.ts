@@ -24,6 +24,11 @@ export class Video {
     })
     descriptions: string
 
+    @Column('text', {
+        nullable: true
+    })
+    preview_img: string
+
     @ManyToOne(
         () => User,
         ( user ) => user.videos
@@ -32,7 +37,11 @@ export class Video {
 
     @OneToMany(
         () => Comments,
-        ( comments ) => comments.id
+        ( comments ) => comments.id,
+        {
+            onDelete: 'CASCADE'
+        }
     )
     comments: Comments
+
 }

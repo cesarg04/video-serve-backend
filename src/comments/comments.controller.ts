@@ -21,19 +21,21 @@ export class CommentsController {
     return this.commentsService.addComment(id, user, commentDto)
   }
 
-  @Get()
-  findAll() {
-    return this.commentsService.findAll();
-  }
-
+  // Get Comment By id
+  @Auth()
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.commentsService.findOne(id);
   }
 
+  @Auth()
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
-    return this.commentsService.update(+id, updateCommentDto);
+  update
+  (@Param('id', ParseUUIDPipe) id: string, 
+  @Body() updateCommentDto: UpdateCommentDto,
+  @GetUser() user: User
+  ) {
+    return this.commentsService.update(id, updateCommentDto, user);
   }
 
   @Delete(':id')
@@ -44,6 +46,5 @@ export class CommentsController {
     ) {
     return this.commentsService.remove(id, user);
   }
-
 
 }

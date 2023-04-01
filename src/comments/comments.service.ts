@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { User } from 'src/auth/entities/USER.entity';
@@ -23,10 +23,6 @@ export class CommentsService {
     return 'This action adds a new comment';
   }
 
-  findAll() {
-    return `This action returns all comments`;
-  }
-
   async findOne(id: string) {
     
     const comment = await this.commentsRepository.findOneBy({id})
@@ -34,8 +30,29 @@ export class CommentsService {
     return comment;
   }
 
-  update(id: number, updateCommentDto: UpdateCommentDto) {
-    return `This action updates a #${id} comment`;
+  async update(id: string, updateCommentDto: UpdateCommentDto, user: User) {
+    
+    const comment = await this.findOne( id );
+
+    try {
+
+      if (comment.user.id !== user.id) throw new UnauthorizedException('You do not have permission to delete this comment')
+
+      const update = await this.commentsRepository.save({
+        ...comment,
+        ...updateCommentDto
+      })
+
+      return {
+        update
+      }
+
+    } catch (error) {
+      this.handleDBExceptions(error)
+    }
+
+
+    
   }
 
   async remove(id: string, user: User) {

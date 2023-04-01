@@ -3,6 +3,9 @@ import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { LoginDto } from './dto/login-user.dto';
+import { Auth } from './decorators/auth/auth.decorator';
+import { GetUser } from './decorators/get-user/get-user.decorator';
+import { User } from './entities/USER.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -31,5 +34,17 @@ export class AuthController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.authService.remove(+id);
+  }
+
+  @Get('me')
+  @Auth()
+  me(
+    @GetUser() user: User
+  ){
+
+    delete user.password
+    return {
+      user
+    }
   }
 }
