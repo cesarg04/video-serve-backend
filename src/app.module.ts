@@ -11,6 +11,8 @@ import { Video } from './videos/entities/video.entity';
 import { CommentsModule } from './comments/comments.module';
 import { Comments } from './comments/entities/comment.entity';
 import { CommonModule } from './common/common.module';
+import { AudiosModule } from './audios/audios.module';
+import { Audio } from './audios/entities/audio.entity';
 
 
 @Module({
@@ -24,13 +26,14 @@ import { CommonModule } from './common/common.module';
       password: process.env.DB_PASSWORD,
       autoLoadEntities: true,
       synchronize: true,
-      entities: [ User, Video, Comments ]
+      entities: [ User, Video, Comments, Audio ]
     }),
     VideosModule,
     FilesModule,
     AuthModule,
     CommentsModule,
     CommonModule,
+    AudiosModule,
     
   ],
   controllers: [AppController],

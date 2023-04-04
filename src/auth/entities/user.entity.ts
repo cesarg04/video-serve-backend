@@ -1,3 +1,4 @@
+import { Audio } from "src/audios/entities/audio.entity";
 import { Comments } from "src/comments/entities/comment.entity";
 import { Video } from "src/videos/entities/video.entity";
 import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
@@ -31,6 +32,10 @@ export class User {
     })
     isActive: boolean
 
+    @Column('text',{
+        nullable: true
+    })
+    avatar_url: string
 
     @OneToMany(
         () => Video,
@@ -49,6 +54,14 @@ export class User {
         }
     )
     comments: Comments
+
+    @OneToMany(
+        () => Audio,
+        ( audio ) => audio.user,
+        {
+            onDelete: 'CASCADE'
+        }
+    )
 
     @BeforeInsert()
     checkLowerInsert(){

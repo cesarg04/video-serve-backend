@@ -27,7 +27,7 @@ export class Video {
     @Column('text', {
         nullable: true
     })
-    preview_img: string
+    image_portal: string
 
     @ManyToOne(
         () => User,

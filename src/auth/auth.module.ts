@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JWTStrategy } from './strategies/jwt.strategy';
+import { FilesModule } from 'src/files/files.module';
 
 
 
@@ -30,7 +31,8 @@ import { JWTStrategy } from './strategies/jwt.strategy';
       }
     }
   }),
-  ConfigModule
+  ConfigModule,
+  FilesModule
   ],
   exports: [TypeOrmModule, AuthService, JWTStrategy, PassportModule, JwtModule]
 })

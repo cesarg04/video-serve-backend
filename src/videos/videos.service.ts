@@ -91,4 +91,28 @@ export class VideosService {
 
     return filterVideos
   }
+
+  async addImagePreview(id: string, imageURL: string, user: User) {
+
+    const query = this.videoRepository.createQueryBuilder()
+
+    try {
+      
+      query
+      .update(Video)
+      .set({ image_portal: imageURL })
+      .where("id = :id", { id })
+      .execute()
+
+      return {
+        message: 'Image preview added successfully'
+      }
+
+    } catch (error) {
+      console.log(error)
+      throw new InternalServerErrorException(`Error, please try again`)
+    }
+
+
+  }
 }

@@ -1,13 +1,14 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { JwtPayload } from './interfaces';
+import { JwtPayload, UploadavatarUser } from './interfaces';
 import { LoginDto } from './dto/login-user.dto';
+import { FilesService } from 'src/files/files.service';
+import { UpdatePasswordDto } from './dto';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +16,8 @@ export class AuthService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
+    private readonly filesService: FilesService
   ) { }
 
   async create(createAuthDto: CreateAuthDto) {
@@ -44,6 +46,12 @@ export class AuthService {
 
   }
 
+  async findOne( id: string ){
+      const user =  await this.userRepository.findOneBy({id})
+      if (!user) throw new NotFoundException(`User with id: ${ id } is empty...`)
+      return user 
+  }
+
   async sinign(loginDto: LoginDto) {
 
     const { username, password } = loginDto;
@@ -65,13 +73,51 @@ export class AuthService {
     }
 
   }
+  async updateAvatar( user: User, url: UploadavatarUser) {
+    
+    const query = this.userRepository.createQueryBuilder();
+    try {
+      await query
+      .update(User)
+      .set({
+        avatar_url: url.avatar_url
+      })
+      .where("id = :id", { id: user.id })
+      .execute()
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
+      return {
+        message: 'Avatar updated successfully'
+      };
+    } catch (error) {
+        console.log(error)
+        this.handleErrors(error)
+    }
+
   }
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
+  async updatePassword( updatePasswordDto: UpdatePasswordDto, user: User ){
+
+    if ( !bcrypt.compareSync(updatePasswordDto.old_password, user.password) ) 
+      throw new UnauthorizedException('Old password incorrect')
+
+    const newPass = bcrypt.hashSync( updatePasswordDto.new_password, 10 );
+    const query = this.userRepository.createQueryBuilder()
+
+    try {
+
+      await query
+      .update(User)
+      .set({ password: newPass })
+      .where("id = :id", { id: user.id })
+      .execute()
+      
+      return {
+        message: 'Password updated successuly'
+      }
+    } catch (error) {
+        console.log(error)
+        this.handleErrors(error)
+    }
   }
 
   remove(id: number) {

@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFile, ParseFilePipe, FileTypeValidator, UseInterceptors, BadRequestException } from '@nestjs/common';
+import { Controller, Post, UploadedFile, UseInterceptors, BadRequestException } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { fileFilter } from './helpers/fileFilter';
 import { diskStorage } from 'multer';
 import { fileNamer } from './helpers/FileNamer';
+import { GetUser } from 'src/auth/decorators/get-user/get-user.decorator';
+import { User } from 'src/auth/entities';
 
 @Controller('files')
 export class FilesController {
@@ -20,13 +22,16 @@ export class FilesController {
     })
   )
   uploadFile(
-    @UploadedFile() file: Express.Multer.File
+    @UploadedFile() file: Express.Multer.File,
+    @GetUser() user: User
   ){
 
     if (!file) throw new BadRequestException('Make sure that the file is an image')
 
     console.log(file.filename)
 
-    return this.filesService.uploadFileToCloud( file )
+    return this.filesService.uploadFileToCloud( file, user )
   }
+
+  
 }

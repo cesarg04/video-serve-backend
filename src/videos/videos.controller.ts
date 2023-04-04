@@ -11,13 +11,14 @@ import { Auth } from 'src/auth/decorators/auth/auth.decorator';
 import { GetUser } from 'src/auth/decorators/get-user/get-user.decorator';
 import { User } from 'src/auth/entities/user.entity';
 import { FindVideoDto } from './dto/find-vide.dto';
+import { imageFilter } from 'src/files/helpers/imagesFilter';
 
 @Controller('videos')
 export class VideosController {
   constructor(
     private readonly videosService: VideosService,
     private readonly filesService: FilesService
-    ) {}
+  ) { }
 
   @Post()
   @Auth()
@@ -31,19 +32,43 @@ export class VideosController {
     })
   )
   async create(
-    @Body() createVideoDto: CreateVideoDto, 
+    @Body() createVideoDto: CreateVideoDto,
     @UploadedFile() file: Express.Multer.File,
     @GetUser() user: User) {
 
     if (!file) throw new BadRequestException('The file does not exist')
-      
-    const imageUrl = await this.filesService.uploadFileToCloud( file )
+
+    const imageUrl = await this.filesService.uploadFileToCloud(file, user)
 
     return this.videosService.create({
       ...createVideoDto,
       url: imageUrl,
-    },user);
+    }, user);
   }
+
+  @Patch('add-preview/:id')
+  @Auth()
+  @UseInterceptors(
+    FileInterceptor('img_preview', {
+      fileFilter: imageFilter,
+      storage: diskStorage({
+        destination: './static/images',
+        filename: fileNamer
+      })
+    })
+  )
+  async addimagePreview(
+    @Param('id', ParseUUIDPipe) id: string,
+    @UploadedFile() file: Express.Multer.File,
+    @GetUser() user: User
+  ) {
+
+    if (!file) throw new BadRequestException('The file does not exist')
+    const imageUrl = await this.filesService.uploadImagePreview(file, user, 'videos');
+    return this.videosService.addImagePreview(id, imageUrl, user)
+
+  }
+
 
   @Get()
   findAll() {
@@ -65,16 +90,16 @@ export class VideosController {
   remove(
     @Param('id', ParseUUIDPipe) id: string,
     @GetUser() user: User
-    ) {
+  ) {
     return this.videosService.remove(id, user);
   }
 
   @Post('find')
   findVideo(
     @Body() findVideoDto: FindVideoDto
-  ){
+  ) {
     return this.videosService.findVideo(findVideoDto)
   }
 
-  
+
 }
