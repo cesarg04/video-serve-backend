@@ -71,9 +71,8 @@ export class AuthController {
   ) {
 
     delete user.password
-    return {
-      user
-    }
+    return user
+    
   }
 
   @Patch('update-password')

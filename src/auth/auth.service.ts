@@ -60,13 +60,13 @@ export class AuthService {
       where: {
         username
       },
-      select: { username: true, password: true, id: true, email: true }
+      // select: { username: true, password: true, id: true, email: true, isActive: true, avatar_url: true }
     })
 
     if (!user) throw new NotFoundException('Credentials not valid (username)');
 
     if (!bcrypt.compareSync(password, user.password)) throw new UnauthorizedException('Credentials not valid (pssword)')
-
+    delete user.password;
     return {
       ...user,
       token: this.getJwtToken({ id: user.id })

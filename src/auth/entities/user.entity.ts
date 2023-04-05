@@ -44,7 +44,7 @@ export class User {
             onDelete: 'CASCADE'
         }
     )
-    videos: Video
+    videos: Video[]
 
     @OneToMany(
         () => Comments,
@@ -53,7 +53,7 @@ export class User {
             onDelete: 'CASCADE'
         }
     )
-    comments: Comments
+    comments: Comments[]
 
     @OneToMany(
         () => Audio,
@@ -62,6 +62,7 @@ export class User {
             onDelete: 'CASCADE'
         }
     )
+    audios: Audio[]
 
     @BeforeInsert()
     checkLowerInsert(){

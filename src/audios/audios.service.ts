@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateAudioDto } from './dto/create-audio.dto';
 import { UpdateAudioDto } from './dto/update-audio.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -90,6 +90,14 @@ export class AudiosService {
       this.handleErrors(error)
     }
   
+  }
+
+  async findAudio (key: string){
+    const audios = await this.findAll()
+    const filterAudios = audios.filter(audio => audio.title.toLowerCase().includes(key.toLowerCase()))
+    if ( !filterAudios ) throw new NotFoundException('Not audios with this title')
+    return filterAudios
+
   }
 
   private handleErrors(errors: any): never {

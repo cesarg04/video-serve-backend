@@ -61,4 +61,14 @@ export class AudiosController {
     ) {
     return this.audiosService.remove(id, user);
   }
+
+  @Post('find')
+  @Auth()
+  findAudio(
+    @Body() key: string
+  ){
+    return this.audiosService.findAudio(key)
+  }
+
+
 }
