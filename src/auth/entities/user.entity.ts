@@ -37,6 +37,16 @@ export class User {
     })
     avatar_url: string
 
+    @Column('bool', {
+        default: false
+    })
+    google: boolean
+
+    @Column('text', {
+        nullable: true
+    })
+    googleId: string
+
     @OneToMany(
         () => Video,
         ( video ) => video.user,

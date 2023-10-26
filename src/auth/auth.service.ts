@@ -135,4 +135,13 @@ export class AuthService {
     }
     throw new InternalServerErrorException(`Server internal error, please check server logs`)
   }
+
+  async validateGoogleUser (id: string):Promise<User | undefined> {
+    const user = await this.userRepository.findOne({
+      where: {
+        googleId: id
+      }
+    })
+    return user
+  }
 }

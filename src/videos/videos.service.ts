@@ -38,17 +38,17 @@ export class VideosService {
     }
   }
 
-  findAll() {
-    return this.videoRepository.find({})
-  }
-
-  async findOne(id: string) {
-
-    const video = await this.videoRepository.findOneBy({ id })
-
-    if (!video) throw new NotFoundException(`Video with id: ${id} does not exist`)
+  async findAll() {
+    const video = await this.videoRepository.find({})
 
     return video
+  } 
+
+  async findOne(id: string) {
+    const video = await this.videoRepository.findOneBy({ id })
+    if (!video) throw new NotFoundException(`Video with id: ${id} does not exist`)
+    return video
+    
   }
 
   update(id: string, updateVideoDto: UpdateVideoDto) {
@@ -62,7 +62,6 @@ export class VideosService {
     const query = this.videoRepository.createQueryBuilder('videos')
 
     try {
-
       await query
         .delete()
         .where({

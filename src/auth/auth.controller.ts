@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, UploadedFile, UseInterceptors, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
@@ -12,14 +12,15 @@ import { diskStorage } from 'multer';
 import { fileNamer } from 'src/files/helpers/FileNamer';
 import { FilesService } from 'src/files/files.service';
 import { UpdatePasswordDto } from './dto/update-password.dto';
+import { GoogleOauthGuard } from './guards/google/google-auth.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly filesService: FilesService
-    
-    ) { }
+
+  ) { }
 
   @Post('register')
   create(@Body() createAuthDto: CreateAuthDto) {
@@ -50,14 +51,14 @@ export class AuthController {
   async updateAvatar(
     @UploadedFile() file: Express.Multer.File,
     @GetUser() user: User
-  ){
+  ) {
     const imageUrl = await this.filesService.uploadAvatarUser(file, user);
 
     const avatar_url = {
       avatar_url: imageUrl
     }
     return this.authService.updateAvatar(user, avatar_url);
-  } 
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
@@ -69,10 +70,8 @@ export class AuthController {
   me(
     @GetUser() user: User
   ) {
-
     delete user.password
     return user
-    
   }
 
   @Patch('update-password')
@@ -80,8 +79,20 @@ export class AuthController {
   updatePassword(
     @Body() updatePasswordDto: UpdatePasswordDto,
     @GetUser() user: User
-  ){
+  ) {
     return this.authService.updatePassword(updatePasswordDto, user)
+  }
+
+  @Get('google/login')
+  @UseGuards(GoogleOauthGuard)
+  googleLogin() {
+    return { msg: 'google-login' }
+  }
+
+  @Get('google/redirect')
+  @UseGuards(GoogleOauthGuard)
+  googleRedirect() {
+    return { msg: 'OK' }
   }
 
 }

@@ -35,7 +35,6 @@ export class VideosController {
     @Body() createVideoDto: CreateVideoDto,
     @UploadedFile() file: Express.Multer.File,
     @GetUser() user: User) {
-
     if (!file) throw new BadRequestException('The file does not exist')
 
     const imageUrl = await this.filesService.uploadFileToCloud(file, user)

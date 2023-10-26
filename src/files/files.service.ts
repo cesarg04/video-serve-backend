@@ -88,7 +88,7 @@ export class FilesService {
     
   }
 
-  async uploadAudio(file: Express.Multer.File, user: User){
+  async uploadAudio(file: Express.Multer.File, user: User):Promise<string>{
 
     try {
       const path = `${file.destination}/${ file.filename }`;

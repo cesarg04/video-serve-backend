@@ -33,6 +33,7 @@ export class AudiosController {
     @GetUser() user: User
   ) {
 
+    console.log('file mp3');
     if (!file) throw new BadRequestException('File not found please insert the file')
 
     return this.audiosService.create( createAudioDto, user, file );

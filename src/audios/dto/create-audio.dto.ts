@@ -4,7 +4,8 @@ export class CreateAudioDto {
 
     @IsString()
     @MinLength(1)
-    title: string
+    @IsOptional()
+    title?: string
 
     @IsString()
     @IsOptional()

@@ -23,14 +23,17 @@ export class AudiosService {
     const staticPathImage = this.configService.get('MUSIC_GENERIC_IMAGE');
   
     try {
-      
+
+      const { title } = createAudioDto;
+
       const audioUrl = await this.filesService.uploadAudio(file, user);
 
       const audio = this.audiosRepository.create({
         ...createAudioDto,
         url: audioUrl,
         user,
-        image_portal: staticPathImage
+        image_portal: staticPathImage,
+        title: title ? title : file.filename
       })
 
       await this.audiosRepository.save(audio)
